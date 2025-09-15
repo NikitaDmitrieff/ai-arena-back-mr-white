@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Literal
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -13,10 +13,12 @@ class BaseAgent:
         description: str,
         word: str = "No word, you are mister white",
         provider: str = "openai",
+        model: str = "gpt-4o-mini",
     ):
         self.name = name
         self.description = description
         self.word = word
+        self.model = model
         # Load environment variables from .env once at initialization
         load_dotenv()
         self.provider = provider.lower()
@@ -45,7 +47,6 @@ class BaseAgent:
         user_prompt: str,
         system_prompt: str = "You are a helpful assistant",
         *,
-        model: str = "gpt-4o-mini",
         temperature: float = 0.2,
         max_output_tokens: int = 1024,
         timeout: Optional[float] = 60.0,
@@ -73,7 +74,7 @@ class BaseAgent:
             # Prefer the modern Responses API. Fallback to Chat Completions if not available.
             try:
                 response = client.responses.create(  # type: ignore[call-arg]
-                    model=model,
+                    model=self.model,
                     temperature=temperature,
                     max_output_tokens=max_output_tokens,
                     input=[
@@ -115,7 +116,7 @@ class BaseAgent:
             except Exception:
                 # Fallback to Chat Completions for environments with older SDKs
                 completion = client.chat.completions.create(  # type: ignore[call-arg]
-                    model=model,
+                    model=self.model,
                     temperature=temperature,
                     max_tokens=max_output_tokens,
                     messages=[
@@ -140,7 +141,7 @@ class BaseAgent:
                 },
             ]
             response = self._client.chat.complete(  # type: ignore[call-arg]
-                model=model,
+                model=self.model,
                 messages=messages,
                 temperature=temperature,
                 max_tokens=max_output_tokens,
@@ -157,19 +158,19 @@ class BaseAgent:
         )
 
 
-class Agent(BaseAgent):
-    def __init__(self, name:str, description:str, word:str= "No word, you are mister white", provider:str= "openai"):
-        super().__init__(name, description, word, provider)
-    pass
+class Player(BaseAgent):
+    def __init__(self, name:str, description:str, word:str= "No word, you are mister white", provider:str= "openai", model:str= "gpt-4o-mini", is_mister_white:bool=False):
+        super().__init__(name, description, word, provider, model)
+        self.is_mister_white = is_mister_white
 
 
 if __name__ == "__main__":
     provider = "mistral"
-    agent = Agent(name="Agent", description="Agent is a helpful assistant", provider=provider)
     example_model = "gpt-4o-mini" if provider == "openai" else "mistral-small-latest"
+    agent = Player(name="Agent", description="Agent is a helpful assistant", provider=provider, model=example_model)
     print(f"Provider: {provider} | Model: {example_model}")
     print(
         agent.invoke(
-            "Say hi in one short sentence.", model=example_model
+            "Say hi in one short sentence."
         )
     )
