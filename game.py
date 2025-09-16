@@ -274,7 +274,6 @@ def play_single_game(
         system_prompt = prompts.VOTING_SYSTEM.format(
             player_name=player.name, players=f"{[p.name for p in game.players]}"
         )
-        print(system_prompt)
 
         # Use role-specific voting prompts
         if player.is_mister_white:

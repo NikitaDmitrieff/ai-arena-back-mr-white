@@ -8,6 +8,7 @@ from collections import defaultdict
 
 import constants
 from game import play_single_game
+from data_export import initialize_csv_files, append_game_to_csv
 
 
 def run_tournament(
@@ -15,6 +16,7 @@ def run_tournament(
     models: List[Tuple[str, str]] = None,
     verbose: bool = False,
     show_progress: bool = True,
+    folder_config: Dict[str, any] = None,
 ) -> Dict[str, any]:
     """Run multiple games and collect statistics across models."""
 
@@ -25,7 +27,19 @@ def run_tournament(
     # Number of players is determined by number of models
     number_of_players = len(models)
 
-    results = []
+    # Initialize CSV files for incremental writing
+    if folder_config is None:
+        folder_config = {}
+        
+    results_dir, filename_base = initialize_csv_files(
+        enabled_models=models,
+        folder_config=folder_config,
+        num_games=num_games
+    )
+    
+    print(f"📊 CSV files initialized: {results_dir}")
+
+    results = []  # Keep minimal results for final stats processing
     model_stats = defaultdict(
         lambda: {
             "games_played": 0,
@@ -56,13 +70,18 @@ def run_tournament(
                 verbose=verbose,
                 random_seed=game_num,  # Use game number as seed for reproducibility
             )
+            
+            # Immediately write this game's data to CSV files
+            append_game_to_csv(result, results_dir, filename_base)
+            
+            # Keep minimal result data for final summary
             results.append(result)
             completed_games = game_num + 1
 
         except Exception as e:
             failed_game = game_num + 1
             print(f"\n⚠️  ERROR: Game {failed_game} failed with error: {str(e)}")
-            print(f"💾 Saving results from {completed_games} completed games...")
+            print(f"💾 Game data written incrementally. {completed_games} games saved.")
             if verbose:
                 print(f"   Error details: {type(e).__name__}: {str(e)}")
             break
@@ -127,6 +146,10 @@ def run_tournament(
     return {
         "results": results,
         "model_stats": dict(model_stats),
+        "csv_info": {
+            "results_dir": results_dir,
+            "filename_base": filename_base,
+        },
         "summary": {
             "planned_games": num_games,
             "completed_games": completed_games,

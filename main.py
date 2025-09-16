@@ -5,7 +5,7 @@ High-level orchestration of tournaments with CSV logging.
 
 from config import load_simulation_config
 from tournament import run_tournament
-from data_export import save_tournament_to_csv
+from data_export import finalize_tournament_csv
 from results import print_tournament_results
 
 
@@ -26,23 +26,27 @@ def main() -> None:
     print(f"🚀 Starting Mister White AI Tournament")
     print(f"📊 Configuration: {num_games} games, {number_of_players} players")
     print(f"🤖 Models: {len(enabled_models)} enabled models (one per player)")
+    print(f"💾 Using incremental CSV writing to optimize memory usage")
 
     # Show custom folder naming if configured
     if folder_config.get("custom_folder_name") or folder_config.get("folder_suffix"):
         print(f"📁 Custom folder naming enabled")
 
-    # Run the tournament
+    # Run the tournament (CSV files written incrementally)
     tournament_data = run_tournament(
         num_games=num_games,
         models=enabled_models,
         verbose=verbose,
         show_progress=show_progress,
+        folder_config=folder_config,
     )
 
-    # Save comprehensive data to CSV files (including partial results if tournament failed)
-    folder_name = save_tournament_to_csv(
+    # Finalize tournament with summary stats (main game data already written)
+    print(f"\n📊 Main game data written incrementally during tournament")
+    folder_name = finalize_tournament_csv(
         tournament_data=tournament_data,
-        folder_config=folder_config,
+        results_dir=tournament_data["csv_info"]["results_dir"],
+        filename_base=tournament_data["csv_info"]["filename_base"],
     )
 
     # Print results to console
