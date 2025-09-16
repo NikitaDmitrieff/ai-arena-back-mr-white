@@ -48,8 +48,8 @@ class MisterWhiteGame:
         self.secret_word = word
 
     # Lifecycle
-    def start(self, *, random_seed: Optional[int] = None) -> None:
-        self._assign_roles(random_seed=random_seed)
+    def start(self, *, random_seed: Optional[int] = None, mister_white_index: Optional[int] = None) -> None:
+        self._assign_roles(random_seed=random_seed, mister_white_index=mister_white_index)
         self._started = True
 
     def reset(self) -> None:
@@ -67,10 +67,16 @@ class MisterWhiteGame:
         return f"Your secret word is: {player.word}"
 
     # Internals
-    def _assign_roles(self, *, random_seed: Optional[int] = None) -> None:
+    def _assign_roles(self, *, random_seed: Optional[int] = None, mister_white_index: Optional[int] = None) -> None:
         if random_seed is not None:
             random.seed(random_seed)
-        self._mister_white_index = random.randrange(len(self.players))
+        
+        # Use provided index for even distribution, or random as fallback
+        if mister_white_index is not None:
+            self._mister_white_index = mister_white_index
+        else:
+            self._mister_white_index = random.randrange(len(self.players))
+        
         for idx, player in enumerate(self.players):
             is_white = idx == self._mister_white_index
             player.is_mister_white = is_white
@@ -86,7 +92,6 @@ class MisterWhiteGame:
 
 def play_single_game(
     game_id: int,
-    number_of_players: int = 5,
     names: List[str] = None,
     words: List[str] = None,
     models: List[Tuple[str, str]] = None,
@@ -105,6 +110,9 @@ def play_single_game(
     if models is None:
         models = constants.PROVIDERS_AND_MODELS
 
+    # Number of players is determined by number of models (one player per model)
+    number_of_players = len(models)
+
     # Initialize and start the game
     if random_seed is not None:
         random.seed(random_seed)
@@ -112,13 +120,17 @@ def play_single_game(
     game = MisterWhiteGame()
     for i in range(number_of_players):
         name = names[i]
-        # Cycle through available models for variety
-        provider, model = models[i % len(models)]
+        # Each model gets exactly one player
+        provider, model = models[i]
         game.add_player(name=name, provider=provider, model=model)
 
     selected_word = random.choice(words)
     game.set_secret_word(selected_word)
-    game.start(random_seed=random_seed)
+    
+    # Distribute Mister White role evenly across models instead of randomly
+    # Use game_id to cycle through models for fair distribution
+    mister_white_index = (game_id - 1) % number_of_players
+    game.start(random_seed=random_seed, mister_white_index=mister_white_index)
 
     if verbose:
         for p in game.players:

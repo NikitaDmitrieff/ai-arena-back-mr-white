@@ -12,7 +12,6 @@ from game import play_single_game
 
 def run_tournament(
     num_games: int = 10,
-    number_of_players: int = 5,
     models: List[Tuple[str, str]] = None,
     verbose: bool = False,
     show_progress: bool = True,
@@ -22,6 +21,9 @@ def run_tournament(
     # Use default models if none provided
     if models is None:
         models = constants.PROVIDERS_AND_MODELS
+    
+    # Number of players is determined by number of models
+    number_of_players = len(models)
 
     results = []
     model_stats = defaultdict(lambda: {
@@ -36,20 +38,32 @@ def run_tournament(
     })
 
     print(f"🎮 Starting tournament with {num_games} games...")
-
+    
+    completed_games = 0
+    failed_game = None
+    
     for game_num in range(num_games):
         if show_progress and (game_num + 1) % max(1, num_games // 10) == 0:
             print(f"Progress: {game_num + 1}/{num_games} games completed")
 
-        # Play a single game
-        result = play_single_game(
-            game_id=game_num + 1,
-            number_of_players=number_of_players,
-            models=models,
-            verbose=verbose,
-            random_seed=game_num,  # Use game number as seed for reproducibility
-        )
-        results.append(result)
+        try:
+            # Play a single game
+            result = play_single_game(
+                game_id=game_num + 1,
+                models=models,
+                verbose=verbose,
+                random_seed=game_num,  # Use game number as seed for reproducibility
+            )
+            results.append(result)
+            completed_games = game_num + 1
+            
+        except Exception as e:
+            failed_game = game_num + 1
+            print(f"\n⚠️  ERROR: Game {failed_game} failed with error: {str(e)}")
+            print(f"💾 Saving results from {completed_games} completed games...")
+            if verbose:
+                print(f"   Error details: {type(e).__name__}: {str(e)}")
+            break
 
         # Update statistics for each player
         for player_info in result.players:
@@ -94,11 +108,20 @@ def run_tournament(
             else:
                 stats["citizen_win_rate"] = 0.0
 
+    # Final status report
+    if completed_games < num_games:
+        print(f"🛑 Tournament stopped early after {completed_games}/{num_games} games due to error in game {failed_game}")
+    else:
+        print(f"✅ Tournament completed successfully: {completed_games}/{num_games} games")
+
     return {
         "results": results,
         "model_stats": dict(model_stats),
         "summary": {
-            "total_games": num_games,
+            "planned_games": num_games,
+            "completed_games": completed_games,
+            "failed_game": failed_game,
+            "success_rate": completed_games / num_games if num_games > 0 else 0,
             "citizens_wins": sum(1 for r in results if r.winner_side == "citizens"),
             "mister_white_wins": sum(1 for r in results if r.winner_side == "mister_white"),
         },

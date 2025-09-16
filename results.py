@@ -16,9 +16,23 @@ def print_tournament_results(tournament_data: Dict[str, any]) -> None:
     print("🏆 TOURNAMENT RESULTS")
     print("=" * 80)
 
-    print(f"\nGames Played: {summary['total_games']}")
-    print(f"Citizens Wins: {summary['citizens_wins']} ({summary['citizens_wins']/summary['total_games']*100:.1f}%)")
-    print(f"Mister White Wins: {summary['mister_white_wins']} ({summary['mister_white_wins']/summary['total_games']*100:.1f}%)")
+    # Handle both old format (total_games) and new format (completed_games) for compatibility
+    completed_games = summary.get('completed_games', summary.get('total_games', 0))
+    planned_games = summary.get('planned_games', completed_games)
+    
+    if summary.get('failed_game') is not None:
+        print(f"\n⚠️  Tournament Status: PARTIAL COMPLETION")
+        print(f"Completed Games: {completed_games}/{planned_games} ({summary.get('success_rate', 0)*100:.1f}%)")
+        print(f"Failed at Game: {summary['failed_game']}")
+    else:
+        print(f"\n✅ Tournament Status: COMPLETED SUCCESSFULLY")
+        print(f"Games Played: {completed_games}")
+
+    if completed_games > 0:
+        print(f"Citizens Wins: {summary['citizens_wins']} ({summary['citizens_wins']/completed_games*100:.1f}%)")
+        print(f"Mister White Wins: {summary['mister_white_wins']} ({summary['mister_white_wins']/completed_games*100:.1f}%)")
+    else:
+        print("No games completed successfully.")
 
     # Sort models by overall win rate
     sorted_models = sorted(model_stats.items(), key=lambda x: x[1]["win_rate"], reverse=True)

@@ -11,14 +11,18 @@ from typing import Dict
 
 def save_tournament_to_csv(
     tournament_data: Dict[str, any],
-    num_games: int,
-    number_of_players: int,
     folder_config: Dict[str, any] = None,
 ) -> str:
     """Save comprehensive tournament data to CSV files in organized subfolders."""
 
     if folder_config is None:
         folder_config = {}
+
+    # Extract tournament summary info
+    summary = tournament_data["summary"]
+    completed_games = summary.get('completed_games', summary.get('total_games', 0))
+    planned_games = summary.get('planned_games', completed_games)
+    failed_game = summary.get('failed_game')
 
     # Count models used in this tournament
     openai_models = set()
@@ -31,6 +35,9 @@ def save_tournament_to_csv(
         elif provider == "mistral":
             mistral_models.add(model)
 
+    # Derive number of players from total models used
+    number_of_players = len(openai_models) + len(mistral_models)
+
     # Generate timestamp and folder structure
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     datetime_str = datetime.now().strftime("%Y-%m-%d_%H%M%S")
@@ -42,14 +49,19 @@ def save_tournament_to_csv(
     elif folder_config.get("custom_folder_name"):
         folder_name = folder_config["custom_folder_name"]
     else:
-        # Default naming
-        folder_name = f"{datetime_str}_{num_games}games_{number_of_players}players_{model_counts}"
+        # Default naming - use completed games and add partial indicator if needed
+        games_label = f"{completed_games}games"
+        if failed_game is not None:
+            games_label += f"_partial"
+        folder_name = f"{datetime_str}_{games_label}_{number_of_players}players_{model_counts}"
 
         # Add suffix if specified
         if folder_config.get("folder_suffix"):
             folder_name += folder_config["folder_suffix"]
 
-    filename_base = f"{num_games}games_{number_of_players}players_{timestamp}"
+    filename_base = f"{completed_games}games_{number_of_players}players_{timestamp}"
+    if failed_game is not None:
+        filename_base += "_partial"
 
     # Create the organized results directory structure
     base_results_dir = "/Users/nikitadmitrieff/Desktop/Projects/coding/L/Mister white AI/results"
@@ -175,11 +187,40 @@ def save_tournament_to_csv(
                 "avg_votes_received": stats["avg_votes_received"],
             })
 
+    # 5. Tournament Summary CSV (includes failure information)
+    tournament_csv_path = os.path.join(results_dir, f"{filename_base}_tournament_summary.csv")
+    with open(tournament_csv_path, "w", newline="", encoding="utf-8") as csvfile:
+        fieldnames = [
+            "planned_games", "completed_games", "failed_game", "success_rate",
+            "citizens_wins", "mister_white_wins", "tournament_status",
+            "total_models", "openai_models", "mistral_models", 
+            "export_timestamp"
+        ]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        
+        writer.writerow({
+            "planned_games": planned_games,
+            "completed_games": completed_games,
+            "failed_game": failed_game,
+            "success_rate": summary.get('success_rate', 0),
+            "citizens_wins": summary["citizens_wins"],
+            "mister_white_wins": summary["mister_white_wins"],
+            "tournament_status": "PARTIAL" if failed_game is not None else "COMPLETE",
+            "total_models": number_of_players,
+            "openai_models": len(openai_models),
+            "mistral_models": len(mistral_models),
+            "export_timestamp": timestamp
+        })
+
     print(f"\n📊 CSV files saved in organized folder: {folder_name}")
+    status_indicator = "⚠️ PARTIAL" if failed_game is not None else "✅ COMPLETE"
+    print(f"  Status: {status_indicator} ({completed_games}/{planned_games} games)")
     print(f"  • Games: {os.path.basename(games_csv_path)}")
     print(f"  • Players: {os.path.basename(players_csv_path)}")
     print(f"  • Messages: {os.path.basename(messages_csv_path)}")
     print(f"  • Model Stats: {os.path.basename(stats_csv_path)}")
+    print(f"  • Tournament Summary: {os.path.basename(tournament_csv_path)}")
     print(f"  • Full path: {results_dir}")
 
     return folder_name

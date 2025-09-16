@@ -38,7 +38,6 @@ def load_simulation_config(
         # Load tournament configuration
         tournament_config = config.get("tournament_config", {
             "num_games": 2,
-            "number_of_players": 5,
             "verbose": False,
             "show_progress": True,
         })
@@ -52,7 +51,6 @@ def load_simulation_config(
             {},
             {
                 "num_games": 2,
-                "number_of_players": 5,
                 "verbose": False,
                 "show_progress": True,
             },
@@ -64,7 +62,6 @@ def load_simulation_config(
             {},
             {
                 "num_games": 2,
-                "number_of_players": 5,
                 "verbose": False,
                 "show_progress": True,
             },

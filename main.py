@@ -17,13 +17,15 @@ def main() -> None:
 
     # Extract tournament parameters
     num_games = tournament_config.get("num_games", 2)
-    number_of_players = tournament_config.get("number_of_players", 5)
     verbose = tournament_config.get("verbose", False)
     show_progress = tournament_config.get("show_progress", True)
-
+    
+    # Number of players = number of enabled models
+    number_of_players = len(enabled_models)
+    
     print(f"🚀 Starting Mister White AI Tournament")
     print(f"📊 Configuration: {num_games} games, {number_of_players} players")
-    print(f"🤖 Models: {len(enabled_models)} enabled models")
+    print(f"🤖 Models: {len(enabled_models)} enabled models (one per player)")
 
     # Show custom folder naming if configured
     if folder_config.get("custom_folder_name") or folder_config.get("folder_suffix"):
@@ -38,11 +40,9 @@ def main() -> None:
         show_progress=show_progress,
     )
 
-    # Save comprehensive data to CSV files
+    # Save comprehensive data to CSV files (including partial results if tournament failed)
     folder_name = save_tournament_to_csv(
         tournament_data=tournament_data,
-        num_games=num_games,
-        number_of_players=number_of_players,
         folder_config=folder_config,
     )
 
