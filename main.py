@@ -3,12 +3,10 @@ Main entry point for the Mister White AI tournament.
 High-level orchestration of tournaments with CSV logging.
 """
 
-from utils import (
-    run_tournament,
-    print_tournament_results,
-    save_tournament_to_csv,
-    load_simulation_config,
-)
+from config import load_simulation_config
+from tournament import run_tournament
+from data_export import save_tournament_to_csv
+from results import print_tournament_results
 
 
 def main() -> None:
