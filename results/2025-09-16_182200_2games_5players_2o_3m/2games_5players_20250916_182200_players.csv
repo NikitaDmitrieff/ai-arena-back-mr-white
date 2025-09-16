@@ -1,0 +1,11 @@
+game_id,player_name,provider,model,is_mister_white,word,survived,votes_received,won_game,secret_word,winner_side
+1,Lucas,openai,gpt-4o-mini,False,Pillow,True,0,False,Pillow,mister_white
+1,John,openai,gpt-4o,False,Pillow,True,1,False,Pillow,mister_white
+1,Martin,mistral,mistral-small-latest,False,Pillow,True,0,False,Pillow,mister_white
+1,Emily,mistral,mistral-medium-latest,True,,True,1,True,Pillow,mister_white
+1,Sarah,mistral,mistral-large-latest,False,Pillow,False,3,False,Pillow,mister_white
+2,Lucas,openai,gpt-4o-mini,False,car,True,0,True,car,citizens
+2,John,openai,gpt-4o,True,,False,5,False,car,citizens
+2,Martin,mistral,mistral-small-latest,False,car,True,0,True,car,citizens
+2,Emily,mistral,mistral-medium-latest,False,car,True,0,True,car,citizens
+2,Sarah,mistral,mistral-large-latest,False,car,True,0,True,car,citizens

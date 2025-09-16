@@ -1,0 +1,6 @@
+provider,model,games_played,total_wins,win_rate,games_as_mister_white,wins_as_mister_white,mister_white_win_rate,games_as_citizen,wins_as_citizen,citizen_win_rate,eliminated_count,survival_rate,avg_votes_received
+openai,gpt-4o-mini,2,1,0.5,0,0,0.0,2,1,0.5,0,1.0,0.0
+openai,gpt-4o,2,0,0.0,1,0,0.0,1,0,0.0,1,0.5,3.0
+mistral,mistral-small-latest,2,1,0.5,0,0,0.0,2,1,0.5,0,1.0,0.0
+mistral,mistral-medium-latest,2,2,1.0,1,1,1.0,1,1,1.0,0,1.0,0.5
+mistral,mistral-large-latest,2,1,0.5,0,0,0.0,2,1,0.5,1,0.5,1.5

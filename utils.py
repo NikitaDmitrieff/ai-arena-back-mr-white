@@ -6,6 +6,7 @@ Contains game logic, CSV logging, and analysis functions.
 from __future__ import annotations
 
 import csv
+import json
 import os
 import random
 from datetime import datetime
@@ -102,6 +103,40 @@ class MisterWhiteGame:
             if p.name.lower() == name_norm:
                 return p
         raise ValueError(f"Player '{player_name}' not found")
+
+
+def load_model_config(config_path: str = "model_config.json") -> Tuple[List[Tuple[str, str]], Dict[str, any]]:
+    """Load model configuration and folder naming options from JSON file."""
+    try:
+        with open(config_path, 'r') as f:
+            config = json.load(f)
+        
+        # Convert enabled models to the format expected by the game
+        enabled_models = []
+        for model_config in config.get("enabled_models", []):
+            enabled_models.append((model_config["provider"], model_config["model"]))
+        
+        if not enabled_models:
+            print("⚠️  No enabled models found in config, falling back to constants")
+            enabled_models = constants.PROVIDERS_AND_MODELS
+        else:
+            print(f"📋 Loaded {len(enabled_models)} enabled models from {config_path}")
+        
+        # Load folder naming configuration
+        folder_config = config.get("folder_naming", {
+            "custom_folder_name": None,
+            "folder_suffix": None,
+            "use_custom_only": False
+        })
+        
+        return enabled_models, folder_config
+        
+    except FileNotFoundError:
+        print(f"⚠️  Config file {config_path} not found, using constants")
+        return constants.PROVIDERS_AND_MODELS, {}
+    except json.JSONDecodeError:
+        print(f"⚠️  Invalid JSON in {config_path}, using constants")
+        return constants.PROVIDERS_AND_MODELS, {}
 
 
 def play_single_game(
@@ -307,10 +342,15 @@ def play_single_game(
 def run_tournament(
     num_games: int = 10,
     number_of_players: int = 5,
+    models: List[Tuple[str, str]] = None,
     verbose: bool = False,
     show_progress: bool = True
 ) -> Dict[str, any]:
     """Run multiple games and collect statistics across models."""
+    
+    # Use default models if none provided
+    if models is None:
+        models = constants.PROVIDERS_AND_MODELS
     
     results = []
     model_stats = defaultdict(lambda: {
@@ -334,6 +374,7 @@ def run_tournament(
         result = play_single_game(
             game_id=game_num + 1,
             number_of_players=number_of_players,
+            models=models,
             verbose=verbose,
             random_seed=game_num  # Use game number as seed for reproducibility
         )
@@ -391,13 +432,47 @@ def run_tournament(
     }
 
 
-def save_tournament_to_csv(tournament_data: Dict[str, any], num_games: int, number_of_players: int) -> str:
-    """Save comprehensive tournament data to CSV files."""
+def save_tournament_to_csv(tournament_data: Dict[str, any], num_games: int, number_of_players: int, folder_config: Dict[str, any] = None) -> str:
+    """Save comprehensive tournament data to CSV files in organized subfolders."""
     
-    # Generate timestamp and filename
+    if folder_config is None:
+        folder_config = {}
+    
+    # Count models used in this tournament
+    openai_models = set()
+    mistral_models = set()
+    
+    for model_key in tournament_data["model_stats"].keys():
+        provider, model = model_key.split('_', 1)
+        if provider == "openai":
+            openai_models.add(model)
+        elif provider == "mistral":
+            mistral_models.add(model)
+    
+    # Generate timestamp and folder structure
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    datetime_str = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+    model_counts = f"{len(openai_models)}o_{len(mistral_models)}m"
+    
+    # Create folder name based on configuration
+    if folder_config.get("use_custom_only", False) and folder_config.get("custom_folder_name"):
+        folder_name = folder_config["custom_folder_name"]
+    elif folder_config.get("custom_folder_name"):
+        folder_name = folder_config["custom_folder_name"]
+    else:
+        # Default naming
+        folder_name = f"{datetime_str}_{num_games}games_{number_of_players}players_{model_counts}"
+        
+        # Add suffix if specified
+        if folder_config.get("folder_suffix"):
+            folder_name += folder_config["folder_suffix"]
+    
     filename_base = f"{num_games}games_{number_of_players}players_{timestamp}"
-    results_dir = "/Users/nikitadmitrieff/Desktop/Projects/coding/L/Mister white AI/results"
+    
+    # Create the organized results directory structure
+    base_results_dir = "/Users/nikitadmitrieff/Desktop/Projects/coding/L/Mister white AI/results"
+    results_dir = os.path.join(base_results_dir, folder_name)
+    os.makedirs(results_dir, exist_ok=True)
     
     # Create three CSV files: games summary, detailed player data, and messages
     
@@ -518,13 +593,14 @@ def save_tournament_to_csv(tournament_data: Dict[str, any], num_games: int, numb
                 'avg_votes_received': stats['avg_votes_received']
             })
     
-    print(f"\n📊 CSV files saved:")
-    print(f"  • Games: {games_csv_path}")
-    print(f"  • Players: {players_csv_path}")
-    print(f"  • Messages: {messages_csv_path}")
-    print(f"  • Model Stats: {stats_csv_path}")
+    print(f"\n📊 CSV files saved in organized folder: {folder_name}")
+    print(f"  • Games: {os.path.basename(games_csv_path)}")
+    print(f"  • Players: {os.path.basename(players_csv_path)}")
+    print(f"  • Messages: {os.path.basename(messages_csv_path)}")
+    print(f"  • Model Stats: {os.path.basename(stats_csv_path)}")
+    print(f"  • Full path: {results_dir}")
     
-    return filename_base
+    return folder_name
 
 
 def print_tournament_results(tournament_data: Dict[str, any]) -> None:

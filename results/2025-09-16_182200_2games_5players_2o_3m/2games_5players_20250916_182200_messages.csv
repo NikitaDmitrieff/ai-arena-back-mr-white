@@ -1,0 +1,41 @@
+game_id,player_name,message_type,phase,round,content,secret_word,is_mister_white
+1,Lucas,clue,clue,0,Comfort,Pillow,False
+1,John,clue,clue,0,Cushion,Pillow,False
+1,Martin,clue,clue,0,Fluff,Pillow,False
+1,Sarah,clue,clue,0,**Fluff**,Pillow,False
+1,Emily,clue,clue,0,Soft,Pillow,True
+1,Lucas,discussion,discussion,1,"I suspect Sarah might be Mister White since her clue ""Fluff"" is identical to Martin's, which could indicate she is trying to blend in rather than provide a unique clue.",Pillow,False
+1,John,discussion,discussion,1,"I agree with Lucas; Sarah repeating ""Fluff"" is suspicious as it lacks originality and could be an attempt to blend in without knowing the secret word.",Pillow,False
+1,Martin,discussion,discussion,1,"I agree with Lucas and John; Sarah's repetition of ""Fluff"" is suspicious. Her clue doesn't fit the theme of comfort-related words like cushion, soft, or pillow.",Pillow,False
+1,Emily,discussion,discussion,1,"Hmm, I actually find **John** a bit suspicious now—his clue ""Cushion"" is very close to Lucas's ""Comfort,"" almost like he’s mimicking the theme without adding anything fresh. Could be a safe play to avoid standing out.",Pillow,True
+1,Sarah,discussion,discussion,1,"John seems the most suspicious now—his clue ""Cushion"" feels too safe and derivative of Lucas's ""Comfort,"" almost like he’s guessing the theme rather than knowing the word. Emily’s point about his lack of originality is valid.",Pillow,False
+1,Lucas,discussion,discussion,2,"I still think Sarah is the most suspicious because her identical clue ""Fluff"" to Martin's suggests she might be trying to blend in. However, John's clue ""Cushion"" also raises red flags for being too close to my clue ""Comfort."" Both could be potential candidates, but Sarah's repetition stands out more.",Pillow,False
+1,John,discussion,discussion,2,"Sarah seems the most suspicious because her clue ""Fluff"" is identical to Martin's, suggesting she might be trying to blend in without knowing the secret word. Her lack of originality stands out more compared to the others.",Pillow,False
+1,Martin,discussion,discussion,2,"Based on the clues, I think **Emily** might be Mister White. Her clue ""Soft"" doesn't directly relate to the theme of comfort-related words like cushion, fluff, or pillow.",Pillow,False
+1,Emily,discussion,discussion,2,"I still think **John** is the most suspicious—his clue ""Cushion"" feels too calculated, like he’s just rephrasing ""Comfort"" to avoid standing out. Meanwhile, Sarah’s repetition of ""Fluff"" could just be a coincidence, but John’s seems *too* safe.",Pillow,True
+1,Sarah,discussion,discussion,2,"I agree with **Martin**—**Emily’s** clue *""Soft""* feels too vague and doesn’t directly tie to *""Pillow""* like the others (cushion, fluff, comfort). She’s my top suspect now.",Pillow,False
+1,Lucas,vote,voting,1,Sarah,Pillow,False
+1,John,vote,voting,1,Sarah,Pillow,False
+1,Martin,vote,voting,1,Sarah,Pillow,False
+1,Emily,vote,voting,1,John,Pillow,True
+1,Sarah,vote,voting,1,Emily,Pillow,False
+2,Lucas,clue,clue,0,Vehicle,car,False
+2,Martin,clue,clue,0,Engine,car,False
+2,Emily,clue,clue,0,**Road**,car,False
+2,Sarah,clue,clue,0,**Road**,car,False
+2,John,clue,clue,0,Highway,car,True
+2,Lucas,discussion,discussion,1,"I suspect Martin might be Mister White since ""Engine"" is less directly related to the word ""car"" compared to the others, which all connect more closely to vehicles.",car,False
+2,John,discussion,discussion,1,"I think Emily and Sarah are suspicious because they both used the exact same clue, ""Road,"" which might indicate they are trying to blend in without adding new information.",car,True
+2,Martin,discussion,discussion,1,"I agree with Lucas; my clue ""Engine"" is less directly related to ""car"" compared to the others, making me a potential suspect. However, John's clue ""Highway"" is also quite broad and could be seen as less directly related.",car,False
+2,Emily,discussion,discussion,1,"John’s clue, **""Highway,""** feels the most disconnected—it’s broader and less directly tied to *""car""* than ""road"" or ""vehicle."" Martin’s **""engine""** is a core part of a car, so I’d lean toward John being suspicious.",car,False
+2,Sarah,discussion,discussion,1,"John’s **""highway""** feels the most vague—it’s a stretch compared to the others, which are more directly tied to *""car.""* I’d suspect him.",car,False
+2,Lucas,discussion,discussion,2,"I suspect John might be Mister White since his clue ""Highway"" is broader and less directly related to ""car"" compared to the other clues. Both Emily and Sarah pointed out the vagueness of his clue, which strengthens the suspicion against him.",car,False
+2,John,discussion,discussion,2,"I think Emily and Sarah are still suspicious because they both used the exact same clue, ""Road,"" which could indicate they are trying to avoid standing out by not providing unique information.",car,True
+2,Martin,discussion,discussion,2,"Based on the clues, I think John might be Mister White because his clue ""Highway"" is the broadest and least directly related to ""car.""",car,False
+2,Emily,discussion,discussion,2,"John’s **""highway""** still feels the weakest—it’s too broad and doesn’t directly tie to *""car""* like ""engine"" or ""road"" do. I’d vote him as Mister White.",car,False
+2,Sarah,discussion,discussion,2,"John’s **""highway""** is the weakest link—it’s too broad and doesn’t directly connect to *""car""* like the others. I’d say he’s the most suspicious.",car,False
+2,Lucas,vote,voting,1,John,car,False
+2,John,vote,voting,1,John,car,True
+2,Martin,vote,voting,1,John,car,False
+2,Emily,vote,voting,1,John,car,False
+2,Sarah,vote,voting,1,John,car,False
