@@ -159,7 +159,15 @@ class BaseAgent:
 
 
 class Player(BaseAgent):
-    def __init__(self, name:str, description:str, word:str= "No word, you are mister white", provider:str= "openai", model:str= "gpt-4o-mini", is_mister_white:bool=False):
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        word: str = "No word, you are mister white",
+        provider: str = "openai",
+        model: str = "gpt-4o-mini",
+        is_mister_white: bool = False,
+    ):
         super().__init__(name, description, word, provider, model)
         self.is_mister_white = is_mister_white
 
@@ -167,10 +175,11 @@ class Player(BaseAgent):
 if __name__ == "__main__":
     provider = "mistral"
     example_model = "gpt-4o-mini" if provider == "openai" else "mistral-small-latest"
-    agent = Player(name="Agent", description="Agent is a helpful assistant", provider=provider, model=example_model)
-    print(f"Provider: {provider} | Model: {example_model}")
-    print(
-        agent.invoke(
-            "Say hi in one short sentence."
-        )
+    agent = Player(
+        name="Agent",
+        description="Agent is a helpful assistant",
+        provider=provider,
+        model=example_model,
     )
+    print(f"Provider: {provider} | Model: {example_model}")
+    print(agent.invoke("Say hi in one short sentence."))

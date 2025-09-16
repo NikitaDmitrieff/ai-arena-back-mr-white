@@ -10,8 +10,9 @@ AI tournament system for the social deduction game "Mister White" using multiple
    MISTRAL_API_KEY=your_key_here
    ```
 
-2. **Configure models** in `model_config.json`:
-   - Move models between `enabled_models` and `disabled_models`
+2. **Configure simulation** in `simulation_config.json`:
+   - Set tournament parameters (`num_games`, `number_of_players`)
+   - Select enabled models
    - Optionally set custom folder naming
 
 3. **Run tournament**:
@@ -29,9 +30,19 @@ AI tournament system for the social deduction game "Mister White" using multiple
 
 ## Configuration
 
-### Model Selection (`model_config.json`)
+### Complete Configuration (`simulation_config.json`)
 ```json
 {
+  "tournament_config": {
+    "num_games": 10,
+    "number_of_players": 5,
+    "verbose": false,
+    "show_progress": true
+  },
+  "folder_naming": {
+    "custom_folder_name": "my_experiment",
+    "use_custom_only": true
+  },
   "enabled_models": [
     {"provider": "openai", "model": "gpt-4o-mini"},
     {"provider": "mistral", "model": "mistral-small-latest"}
@@ -39,15 +50,11 @@ AI tournament system for the social deduction game "Mister White" using multiple
 }
 ```
 
-### Folder Naming
-```json
-{
-  "folder_naming": {
-    "custom_folder_name": "my_experiment",
-    "use_custom_only": true
-  }
-}
-```
+### Tournament Parameters
+- `num_games`: Number of games to run (epochs)
+- `number_of_players`: Players per game (5 recommended)
+- `verbose`: Show detailed game output
+- `show_progress`: Display progress during tournament
 
 ## Output
 

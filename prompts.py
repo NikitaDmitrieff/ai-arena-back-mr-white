@@ -24,6 +24,6 @@ MISTER_WHITE_DISCUSSION_USER = "Previous clues:\n{context}\n\nYou are Mister Whi
 REGULAR_PLAYER_DISCUSSION_USER = "Previous clues:\n{context}\n\nYour word is '{word}'. Based on the clues, who do you think is Mister White (gave a clue that doesn't fit)?"
 
 # VOTING PHASE PROMPTS
-VOTING_SYSTEM = "You are {player_name}. Based on all the discussion, vote for who you think is Mister White. Respond with ONLY the name of the player you want to vote for."
+VOTING_SYSTEM = "You are {player_name}. Based on all the discussion, vote for who you think is Mister White. Respond with ONLY the name of the player you want to vote for. You MUST vote for a player."
 
 VOTING_USER = "All messages:\n{context}\n\nWho do you vote to eliminate as Mister White? (respond with just the name):"
