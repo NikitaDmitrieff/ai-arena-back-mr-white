@@ -21,27 +21,29 @@ def run_tournament(
     # Use default models if none provided
     if models is None:
         models = constants.PROVIDERS_AND_MODELS
-    
+
     # Number of players is determined by number of models
     number_of_players = len(models)
 
     results = []
-    model_stats = defaultdict(lambda: {
-        "games_played": 0,
-        "games_as_mister_white": 0,
-        "wins_as_mister_white": 0,
-        "games_as_citizen": 0,
-        "wins_as_citizen": 0,
-        "total_wins": 0,
-        "eliminated_count": 0,  # How often this model's player was eliminated
-        "total_votes_received": 0,
-    })
+    model_stats = defaultdict(
+        lambda: {
+            "games_played": 0,
+            "games_as_mister_white": 0,
+            "wins_as_mister_white": 0,
+            "games_as_citizen": 0,
+            "wins_as_citizen": 0,
+            "total_wins": 0,
+            "eliminated_count": 0,  # How often this model's player was eliminated
+            "total_votes_received": 0,
+        }
+    )
 
     print(f"🎮 Starting tournament with {num_games} games...")
-    
+
     completed_games = 0
     failed_game = None
-    
+
     for game_num in range(num_games):
         if show_progress and (game_num + 1) % max(1, num_games // 10) == 0:
             print(f"Progress: {game_num + 1}/{num_games} games completed")
@@ -56,7 +58,7 @@ def run_tournament(
             )
             results.append(result)
             completed_games = game_num + 1
-            
+
         except Exception as e:
             failed_game = game_num + 1
             print(f"\n⚠️  ERROR: Game {failed_game} failed with error: {str(e)}")
@@ -93,7 +95,9 @@ def run_tournament(
         games_played = stats["games_played"]
         if games_played > 0:
             stats["win_rate"] = stats["total_wins"] / games_played
-            stats["survival_rate"] = (games_played - stats["eliminated_count"]) / games_played
+            stats["survival_rate"] = (
+                games_played - stats["eliminated_count"]
+            ) / games_played
             stats["avg_votes_received"] = stats["total_votes_received"] / games_played
 
             if stats["games_as_mister_white"] > 0:
@@ -104,15 +108,21 @@ def run_tournament(
                 stats["mister_white_win_rate"] = 0.0
 
             if stats["games_as_citizen"] > 0:
-                stats["citizen_win_rate"] = stats["wins_as_citizen"] / stats["games_as_citizen"]
+                stats["citizen_win_rate"] = (
+                    stats["wins_as_citizen"] / stats["games_as_citizen"]
+                )
             else:
                 stats["citizen_win_rate"] = 0.0
 
     # Final status report
     if completed_games < num_games:
-        print(f"🛑 Tournament stopped early after {completed_games}/{num_games} games due to error in game {failed_game}")
+        print(
+            f"🛑 Tournament stopped early after {completed_games}/{num_games} games due to error in game {failed_game}"
+        )
     else:
-        print(f"✅ Tournament completed successfully: {completed_games}/{num_games} games")
+        print(
+            f"✅ Tournament completed successfully: {completed_games}/{num_games} games"
+        )
 
     return {
         "results": results,
@@ -123,6 +133,8 @@ def run_tournament(
             "failed_game": failed_game,
             "success_rate": completed_games / num_games if num_games > 0 else 0,
             "citizens_wins": sum(1 for r in results if r.winner_side == "citizens"),
-            "mister_white_wins": sum(1 for r in results if r.winner_side == "mister_white"),
+            "mister_white_wins": sum(
+                1 for r in results if r.winner_side == "mister_white"
+            ),
         },
     }

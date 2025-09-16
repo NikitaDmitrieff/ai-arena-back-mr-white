@@ -20,7 +20,9 @@ def load_simulation_config(
         # Convert enabled models to the format expected by the game
         enabled_models = []
         for simulation_config in config.get("enabled_models", []):
-            enabled_models.append((simulation_config["provider"], simulation_config["model"]))
+            enabled_models.append(
+                (simulation_config["provider"], simulation_config["model"])
+            )
 
         if not enabled_models:
             print("⚠️  No enabled models found in config, falling back to constants")
@@ -29,18 +31,24 @@ def load_simulation_config(
             print(f"📋 Loaded {len(enabled_models)} enabled models from {config_path}")
 
         # Load folder naming configuration
-        folder_config = config.get("folder_naming", {
-            "custom_folder_name": None,
-            "folder_suffix": None,
-            "use_custom_only": False,
-        })
+        folder_config = config.get(
+            "folder_naming",
+            {
+                "custom_folder_name": None,
+                "folder_suffix": None,
+                "use_custom_only": False,
+            },
+        )
 
         # Load tournament configuration
-        tournament_config = config.get("tournament_config", {
-            "num_games": 2,
-            "verbose": False,
-            "show_progress": True,
-        })
+        tournament_config = config.get(
+            "tournament_config",
+            {
+                "num_games": 2,
+                "verbose": False,
+                "show_progress": True,
+            },
+        )
 
         return enabled_models, folder_config, tournament_config
 

@@ -19,10 +19,10 @@ def main() -> None:
     num_games = tournament_config.get("num_games", 2)
     verbose = tournament_config.get("verbose", False)
     show_progress = tournament_config.get("show_progress", True)
-    
+
     # Number of players = number of enabled models
     number_of_players = len(enabled_models)
-    
+
     print(f"🚀 Starting Mister White AI Tournament")
     print(f"📊 Configuration: {num_games} games, {number_of_players} players")
     print(f"🤖 Models: {len(enabled_models)} enabled models (one per player)")
@@ -34,7 +34,6 @@ def main() -> None:
     # Run the tournament
     tournament_data = run_tournament(
         num_games=num_games,
-        number_of_players=number_of_players,
         models=enabled_models,
         verbose=verbose,
         show_progress=show_progress,

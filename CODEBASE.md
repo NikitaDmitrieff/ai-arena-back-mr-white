@@ -70,22 +70,24 @@ main.py
 
 **Game Phases Implemented**:
 1. **Setup**: Player assignment, role distribution, word selection
-2. **Word Phase**: Clue collection (regular players first, then Mister White)
-3. **Discussion Phase**: 2 rounds of suspicion discussion
-4. **Voting Phase**: Democratic elimination voting
+2. **Word Phase**: Strategic clue collection (regular players first, then Mister White)
+3. **Discussion Phase**: 2 rounds of role-aware suspicion discussion with win-condition focus
+4. **Voting Phase**: Strategic elimination voting with randomized context and role-specific prompts
 5. **Results**: Winner determination and data collection
 
 **Data Structures**:
 - Game state tracking
-- Message history
-- Player information
-- Vote tallying
+- Message history with phase tagging
+- Player information and role assignments
+- Vote tallying and analysis
 
 **Key Features**:
-- Deterministic role assignment
-- Context-aware prompting
-- Comprehensive message logging
-- Verbose mode for debugging
+- **Deterministic role assignment**: Even distribution with Emily always as Mister White
+- **Strategic prompting**: Role-specific prompts with explicit win conditions
+- **Bias mitigation**: Randomized message order in voting to prevent timing-based decisions
+- **Context-aware prompting**: Different information given to Citizens vs Mister White
+- Comprehensive message logging with phase tracking
+- Verbose mode for debugging strategic decisions
 
 ---
 
@@ -152,27 +154,30 @@ main.py
 
 ---
 
-### `prompts.py` - Game Prompts
-**Purpose**: Centralized prompt management for consistent AI behavior
+### `prompts.py` - Strategic Game Prompts
+**Purpose**: Centralized prompt management for competitive AI behavior with explicit win conditions
 
 **Prompt Categories**:
 1. **Clue Phase Prompts**:
-   - Regular player clue generation
-   - Mister White clue generation (with/without context)
+   - **Citizens**: Strategic clue giving that balances helping allies vs confusing enemies
+   - **Mister White**: Survival-focused blending with context analysis
+   - Explicit explanation of the strategic tradeoff between obvious vs obscure clues
 
 2. **Discussion Phase Prompts**:
-   - Suspicion discussion
-   - Role-specific reasoning
+   - **Role-aware**: Different prompts for Citizens vs Mister White
+   - **Win-condition focused**: Emphasizes winning strategies for each role
+   - **Evidence analysis**: Guides players to analyze clue connections properly
 
 3. **Voting Phase Prompts**:
-   - Democratic voting
-   - Evidence-based decisions
+   - **Role-specific**: Separate prompts for Citizens and Mister White with different win conditions
+   - **Strategic voting**: Emphasizes survival for Mister White, elimination for Citizens
+   - **Anti-bias mechanisms**: Warns against order-based and repeated-word fallacies
 
-**Design Features**:
-- Template-based prompts with variables
-- Role-specific variations
-- Context injection
-- Consistent formatting
+**Strategic Enhancements**:
+- **Win condition clarity**: Every prompt explains how to win in that role
+- **Message randomization**: Voting context shuffled to remove timing biases
+- **Strategic guidance**: Explains tradeoffs and optimal play patterns
+- **Bias mitigation**: Addresses common logical fallacies in social deduction games
 
 ---
 
@@ -182,7 +187,7 @@ main.py
 **Export Formats**:
 1. **Games CSV**: High-level game outcomes and metadata
 2. **Players CSV**: Per-player performance and characteristics  
-3. **Messages CSV**: Complete conversation logs
+3. **Messages CSV**: Complete conversation logs with provider/model attribution
 4. **Model Stats CSV**: Aggregated model performance metrics
 
 **Features**:
@@ -190,7 +195,11 @@ main.py
 - Custom naming support
 - Model count integration
 - UTF-8 encoding for international content
-- Comprehensive data coverage
+- **Enhanced Messages CSV**: Includes provider and model columns for each message
+- Comprehensive data coverage with model attribution
+
+**Messages CSV Structure**:
+Fields: `game_id`, `provider`, `model`, `player_name`, `message_type`, `phase`, `round`, `content`, `secret_word`, `is_mister_white`
 
 **Folder Naming Pattern**:
 `{date}_{time}_{games}games_{models}_{custom_suffix}/`
@@ -223,7 +232,7 @@ main.py
 
 #### `constants.py`
 - Default model configurations
-- Player name pools
+- Player name pools (Emily reserved for Mister White)
 - Secret word lists
 - Fallback configurations
 

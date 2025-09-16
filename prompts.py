@@ -1,29 +1,63 @@
-"""
-Prompts for the Mister White game.
-All system and user prompts are centralized here for easy maintenance.
-"""
+# ---------- CLUE PHASE ----------
+REGULAR_PLAYER_CLUE_SYSTEM = (
+    "ROLE: CITIZEN. Secret word='{word}'. "
+    "TASK: Output EXACTLY ONE WORD. "
+    "Constraints: lowercase; no spaces/punctuation/emojis; NOT the secret word; avoid direct synonyms/rhymes/translations of '{word}'. "
+    "Goal: give a mid-specific associative clue—helpful to citizens but not so obvious that Mister White can safely copy. "
+    "Do NOT explain."
+)
 
-# CLUE PHASE PROMPTS
-REGULAR_PLAYER_CLUE_SYSTEM = "You are playing a game where you must give a one-word clue related to the secret word '{word}'. Make it related but not too obvious."
+REGULAR_PLAYER_CLUE_USER = "Return ONLY the clue word."
 
-REGULAR_PLAYER_CLUE_USER = "Give a one-word clue for the word '{word}':"
+MISTER_WHITE_CLUE_WITH_CONTEXT_SYSTEM = (
+    "ROLE: MISTER WHITE (you do NOT know the secret word). "
+    "You see previous one-word clues: {previous_clues}. "
+    "TASK: Output EXACTLY ONE WORD that plausibly fits the MAJORITY THEME to blend in. "
+    "Constraints: lowercase; no spaces/punctuation/emojis; avoid generic fillers (e.g., 'thing', 'object') and avoid oddly specific giveaways. "
+    "Do NOT explain."
+)
 
-MISTER_WHITE_CLUE_WITH_CONTEXT_SYSTEM = "You are Mister White playing a social deduction game. You do NOT know the secret word, but you've seen other players' clues. Try to give a clue that fits in with theirs to avoid suspicion. Give only one word."
+MISTER_WHITE_CLUE_WITH_CONTEXT_USER = "Return ONLY the word."
 
-MISTER_WHITE_CLUE_WITH_CONTEXT_USER = "Previous clues given:\n{previous_clues}\n\nBased on these clues, what one-word clue would you give to blend in? (You don't know the actual secret word):"
+# ---------- DISCUSSION PHASE ----------
+DISCUSSION_SYSTEM = (
+    "ROLE: {player_name}. Win conditions: Citizens eliminate Mister White; Mister White survives. "
+    "STYLE: Be decisive. Keep it brief."
+)
 
-MISTER_WHITE_CLUE_NO_CONTEXT_SYSTEM = "You are playing a game where you must give a one-word clue. You do NOT know the secret word, so you must guess what it might be and give a related clue. Be creative but not too obvious."
+MISTER_WHITE_DISCUSSION_USER = (
+    "Context:\n{context}\n\n"
+    "ROLE: MISTER WHITE. GOAL: Deflect suspicion. "
+    "OUTPUT: ONE or TWO SHORT SENTENCES (≤25 words total). "
+    "Pick ONE suspect and give a crisp reason focused on their clue’s mismatch. No lists, no preambles."
+)
 
-MISTER_WHITE_CLUE_NO_CONTEXT_USER = "Give a one-word clue that might relate to the secret word (you don't know what it is):"
+REGULAR_PLAYER_DISCUSSION_USER = (
+    "Context:\n{context}\n\n"
+    "ROLE: CITIZEN with word '{word}'. GOAL: Find Mister White. "
+    "OUTPUT: ONE or TWO SHORT SENTENCES (≤25 words total). "
+    "Name ONE suspect whose clue least connects to '{word}' or feels too generic/safe."
+)
 
-# DISCUSSION PHASE PROMPTS
-DISCUSSION_SYSTEM = "You are {player_name} in a social deduction game. Your goal is to find Mister White (who doesn't know the secret word). Based on the clues given, discuss who you think might be suspicious. Keep responses brief (1-2 sentences)."
+# ---------- VOTING PHASE ----------
+VOTING_SYSTEM = (
+    "ROLE: {player_name}. FINAL VOTE. "
+    "TASK: Output ONLY THE NAME of the player to eliminate. "
+    "If a list is provided, choose a name from: {players}. "
+    "No punctuation, no extra words."
+)
 
-MISTER_WHITE_DISCUSSION_USER = "Previous clues:\n{context}\n\nYou are Mister White (you don't know the secret word). Try to blend in and deflect suspicion. Who do you think is suspicious and why?"
+CITIZEN_VOTING_USER = (
+    "All messages (order randomized):\n{context}\n\n"
+    "ROLE: CITIZEN. You win if Mister White is eliminated. "
+    "Hint: Mister White saw others’ clues before giving theirs; similarity alone ≠ guilt. "
+    "Focus on the clue least connected to '{word}' or overly generic/safe.\n\n"
+    "OUTPUT: ONLY the name."
+)
 
-REGULAR_PLAYER_DISCUSSION_USER = "Previous clues:\n{context}\n\nYour word is '{word}'. Based on the clues, who do you think is Mister White (gave a clue that doesn't fit)?"
-
-# VOTING PHASE PROMPTS
-VOTING_SYSTEM = "You are {player_name}. Based on all the discussion, vote for who you think is Mister White. Respond with ONLY the name of the player you want to vote for. You MUST vote for a player."
-
-VOTING_USER = "All messages:\n{context}\n\nWho do you vote to eliminate as Mister White? (respond with just the name):"
+MISTER_WHITE_VOTING_USER = (
+    "All messages (order randomized):\n{context}\n\n"
+    "ROLE: MISTER WHITE. You win if you SURVIVE. "
+    "Vote to push attention elsewhere; avoid reciprocal suspicion.\n\n"
+    "OUTPUT: ONLY the name."
+)

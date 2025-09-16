@@ -8,6 +8,7 @@ from typing import List, Dict, Tuple, NamedTuple
 
 class GameResult(NamedTuple):
     """Structured result from a single game."""
+
     game_id: int
     timestamp: str
     winner_side: str  # "citizens" or "mister_white"
