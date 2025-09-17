@@ -6,7 +6,7 @@ Handles loading and parsing of simulation_config.json.
 import json
 from typing import List, Tuple, Dict
 
-import constants
+from src.config import constants
 
 
 def load_simulation_config(

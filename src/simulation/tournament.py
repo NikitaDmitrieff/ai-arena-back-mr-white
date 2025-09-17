@@ -6,9 +6,9 @@ Handles running multiple games and collecting statistics.
 from typing import List, Tuple, Dict
 from collections import defaultdict
 
-import constants
-from game import play_single_game
-from data_export import initialize_csv_files, append_game_to_csv
+from src.config import constants
+from src.core.game import play_single_game
+from src.data.data_export import initialize_csv_files, append_game_to_csv
 
 
 def run_tournament(

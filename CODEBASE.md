@@ -8,18 +8,37 @@ The codebase implements a modular AI tournament system for the social deduction 
 
 ## Module Breakdown
 
+### Organized Folder Structure
+
+The codebase is organized into logical packages within the `src/` directory for better maintainability:
+
+- **`src/core/`**: Core game engine components (game logic, AI agents, data models)
+- **`src/config/`**: Configuration management and constants
+- **`src/simulation/`**: Tournament orchestration and multi-game management
+- **`src/data/`**: Data export, persistence, and analysis display
+- **`src/prompts/`**: Game prompts and AI instructions
+
+This structure provides clear separation of concerns and makes the codebase easier to navigate and extend.
+
 ### Core Architecture
 
 ```
-main.py
-├── config.py (load configuration)
-├── tournament.py (orchestrate games)
-│   └── game.py (execute single games)
-│       ├── models.py (data structures)
-│       ├── agent.py (LLM players)
-│       └── prompts.py (game text)
-├── data_export.py (save results)
-└── results.py (display analysis)
+main.py (main entry point)
+└── src/
+    ├── config/
+    │   ├── config.py (load configuration)
+    │   └── constants.py (defaults and constants)
+    ├── core/
+    │   ├── agent.py (LLM players)
+    │   ├── game.py (execute single games)
+    │   └── models.py (data structures)
+    ├── simulation/
+    │   └── tournament.py (orchestrate games)
+    ├── data/
+    │   ├── data_export.py (save results)
+    │   └── results.py (display analysis)
+    └── prompts/
+        └── prompts.py (game text and instructions)
 ```
 
 ## Detailed Module Documentation
@@ -41,7 +60,7 @@ main.py
 
 ---
 
-### `config.py` - Configuration Management
+### `src/config/config.py` - Configuration Management
 **Purpose**: Centralized configuration loading and validation
 
 **Key Functions**:
@@ -59,7 +78,7 @@ main.py
 
 ---
 
-### `game.py` - Core Game Engine
+### `src/core/game.py` - Core Game Engine
 **Purpose**: Complete single game execution and mechanics
 
 **Key Classes**:
@@ -91,7 +110,7 @@ main.py
 
 ---
 
-### `tournament.py` - Multi-Game Management
+### `src/simulation/tournament.py` - Multi-Game Management
 **Purpose**: Execute multiple games and aggregate statistics
 
 **Key Functions**:
@@ -112,7 +131,7 @@ main.py
 
 ---
 
-### `models.py` - Data Structures
+### `src/core/models.py` - Data Structures
 **Purpose**: Type definitions and data containers
 
 **Key Types**:
@@ -130,7 +149,7 @@ main.py
 
 ---
 
-### `agent.py` - AI Player Implementation
+### `src/core/agent.py` - AI Player Implementation
 **Purpose**: LLM integration and player behavior
 
 **Key Classes**:
@@ -154,7 +173,7 @@ main.py
 
 ---
 
-### `prompts.py` - Strategic Game Prompts
+### `src/prompts/prompts.py` - Strategic Game Prompts
 **Purpose**: Centralized prompt management for competitive AI behavior with explicit win conditions
 
 **Prompt Categories**:
@@ -181,7 +200,7 @@ main.py
 
 ---
 
-### `data_export.py` - Data Persistence
+### `src/data/data_export.py` - Data Persistence
 **Purpose**: Comprehensive CSV export with organized file structure
 
 **Export Formats**:
@@ -206,7 +225,7 @@ Fields: `game_id`, `provider`, `model`, `player_name`, `message_type`, `phase`, 
 
 ---
 
-### `results.py` - Analysis and Display
+### `src/data/results.py` - Analysis and Display
 **Purpose**: Console output formatting and statistical analysis
 
 **Key Functions**:
@@ -230,13 +249,13 @@ Fields: `game_id`, `provider`, `model`, `player_name`, `message_type`, `phase`, 
 
 ### Supporting Files
 
-#### `constants.py`
+#### `src/config/constants.py`
 - Default model configurations
 - Player name pools (Emily reserved for Mister White)
 - Secret word lists
 - Fallback configurations
 
-#### `prompts.py`
+#### `src/prompts/prompts.py`
 - All game text and instructions
 - System prompts for LLM guidance
 - User prompts for specific actions
@@ -252,20 +271,20 @@ Fields: `game_id`, `provider`, `model`, `player_name`, `message_type`, `phase`, 
 
 ```
 Configuration Loading:
-simulation_config.json → config.py → main.py
+simulation_config.json → src/config/config.py → main.py
 
 Game Execution:
-main.py → tournament.py → game.py → agent.py
-                    ↓
-              models.py (data structures)
-                    ↓
-           prompts.py (AI instructions)
+main.py → src/simulation/tournament.py → src/core/game.py → src/core/agent.py
+                                   ↓
+                           src/core/models.py (data structures)
+                                   ↓
+                        src/prompts/prompts.py (AI instructions)
 
 Data Export:
-tournament results → data_export.py → CSV files
+tournament results → src/data/data_export.py → CSV files
 
 Analysis Display:
-tournament results → results.py → console output
+tournament results → src/data/results.py → console output
 ```
 
 ## Design Principles
@@ -279,11 +298,11 @@ tournament results → results.py → console output
 
 ## Extension Points
 
-- **New LLM Providers**: Add to `agent.py` with API integration
-- **Game Variants**: Modify `game.py` phases or rules
-- **Analysis Methods**: Extend `results.py` with new metrics
-- **Export Formats**: Add formats to `data_export.py`
-- **Prompt Strategies**: Experiment with `prompts.py` variations
+- **New LLM Providers**: Add to `src/core/agent.py` with API integration
+- **Game Variants**: Modify `src/core/game.py` phases or rules
+- **Analysis Methods**: Extend `src/data/results.py` with new metrics
+- **Export Formats**: Add formats to `src/data/data_export.py`
+- **Prompt Strategies**: Experiment with `src/prompts/prompts.py` variations
 
 ## Performance Considerations
 

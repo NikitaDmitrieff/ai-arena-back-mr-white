@@ -7,10 +7,10 @@ import random
 from datetime import datetime
 from typing import List, Optional, Dict, Tuple
 
-import constants
-import prompts
-from agent import Player
-from models import GameResult
+from src.config import constants
+from src.prompts import prompts
+from src.core.agent import Player
+from src.core.models import GameResult
 
 
 class MisterWhiteGame:
