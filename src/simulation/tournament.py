@@ -3,12 +3,12 @@ Tournament management for Mister White games.
 Handles running multiple games and collecting statistics.
 """
 
-from typing import List, Tuple, Dict
 from collections import defaultdict
+from typing import Dict, List, Tuple
 
 from src.config import constants
 from src.core.game import play_single_game
-from src.data.data_export import initialize_csv_files, append_game_to_csv
+from src.data.data_export import append_game_to_csv, initialize_csv_files
 
 
 def run_tournament(
@@ -30,13 +30,11 @@ def run_tournament(
     # Initialize CSV files for incremental writing
     if folder_config is None:
         folder_config = {}
-        
+
     results_dir, filename_base = initialize_csv_files(
-        enabled_models=models,
-        folder_config=folder_config,
-        num_games=num_games
+        enabled_models=models, folder_config=folder_config, num_games=num_games
     )
-    
+
     print(f"📊 CSV files initialized: {results_dir}")
 
     results = []  # Keep minimal results for final stats processing
@@ -70,10 +68,10 @@ def run_tournament(
                 verbose=verbose,
                 random_seed=game_num,  # Use game number as seed for reproducibility
             )
-            
+
             # Immediately write this game's data to CSV files
             append_game_to_csv(result, results_dir, filename_base)
-            
+
             # Keep minimal result data for final summary
             results.append(result)
             completed_games = game_num + 1

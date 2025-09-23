@@ -3,7 +3,7 @@ Data models and structures for the Mister White game.
 Contains all data types used across the game system.
 """
 
-from typing import List, Dict, Tuple, NamedTuple
+from typing import Dict, List, NamedTuple, Tuple
 
 
 class GameResult(NamedTuple):

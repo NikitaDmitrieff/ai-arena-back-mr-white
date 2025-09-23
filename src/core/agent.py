@@ -1,9 +1,9 @@
-from typing import Optional, Literal
 import os
-from dotenv import load_dotenv
-from openai import OpenAI
+from typing import Literal, Optional
 
+from dotenv import load_dotenv
 from mistralai import Mistral
+from openai import OpenAI
 
 
 class BaseAgent:

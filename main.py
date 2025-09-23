@@ -4,9 +4,9 @@ High-level orchestration of tournaments with CSV logging.
 """
 
 from src.config.config import load_simulation_config
-from src.simulation.tournament import run_tournament
 from src.data.data_export import finalize_tournament_csv
 from src.data.results import print_tournament_results
+from src.simulation.tournament import run_tournament
 
 
 def main() -> None:

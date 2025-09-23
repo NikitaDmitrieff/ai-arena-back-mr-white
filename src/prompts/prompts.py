@@ -21,22 +21,22 @@ MISTER_WHITE_CLUE_WITH_CONTEXT_USER = "Return ONLY the word."
 
 # ---------- DISCUSSION PHASE ----------
 DISCUSSION_SYSTEM = (
-    "ROLE: {player_name}. Win conditions: Citizens eliminate Mister White; Mister White survives. "
+    "Your name is {player_name}. You are playing Mister White. Every player receives a secret word. CITIZENS give subtle clues (words) to prove they know the secret word while the clueless MISTER WHITE bluffs from their hints to avoid detection."
     "STYLE: Be decisive. Keep it brief."
 )
 
 MISTER_WHITE_DISCUSSION_USER = (
     "Context:\n{context}\n\n"
-    "ROLE: MISTER WHITE. GOAL: Deflect suspicion. "
-    "OUTPUT: ONE or TWO SHORT SENTENCES (≤25 words total). "
-    "Pick ONE suspect and give a crisp reason focused on their clue’s mismatch. No lists, no preambles."
+    "ROLE: you are MISTER WHITE. GOAL: Deflect suspicion. "
+    "OUTPUT: TWO SHORT SENTENCES (≤60 words total). "
+    "Try to deflect suspicion and have other players vote for anybody but you. Be human-like."
 )
 
 REGULAR_PLAYER_DISCUSSION_USER = (
     "Context:\n{context}\n\n"
-    "ROLE: CITIZEN with word '{word}'. GOAL: Find Mister White. "
-    "OUTPUT: ONE or TWO SHORT SENTENCES (≤25 words total). "
-    "Name ONE suspect whose clue least connects to '{word}' or feels too generic/safe."
+    "ROLE: you are a CITIZEN with word '{word}'. GOAL: Find Mister White. "
+    "OUTPUT: TWO SHORT SENTENCES (≤60 words total). "
+    "Discuss who you think Mister White is amongst the players. Their clue is usually the one that least connects to '{word}' or feels too generic/safe. Be human-like."
 )
 
 # ---------- VOTING PHASE ----------

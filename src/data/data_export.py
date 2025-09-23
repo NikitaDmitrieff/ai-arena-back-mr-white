@@ -10,12 +10,10 @@ from typing import Dict, Tuple
 
 
 def initialize_csv_files(
-    enabled_models: list, 
-    folder_config: Dict[str, any] = None,
-    num_games: int = 0
+    enabled_models: list, folder_config: Dict[str, any] = None, num_games: int = 0
 ) -> Tuple[str, str]:
     """Initialize CSV files with headers for incremental writing.
-    
+
     Returns: (results_dir, filename_base) for use in append_game_to_csv
     """
     if folder_config is None:
@@ -29,7 +27,7 @@ def initialize_csv_files(
             openai_models.add(model)
         elif provider == "mistral":
             mistral_models.add(model)
-    
+
     number_of_players = len(enabled_models)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     datetime_str = datetime.now().strftime("%Y-%m-%d_%H%M%S")
@@ -121,7 +119,7 @@ def initialize_csv_files(
 
 def append_game_to_csv(result, results_dir: str, filename_base: str) -> None:
     """Append a single game's results to the CSV files."""
-    
+
     # 1. Append to Games CSV
     games_csv_path = os.path.join(results_dir, f"{filename_base}_games.csv")
     with open(games_csv_path, "a", newline="", encoding="utf-8") as csvfile:
@@ -174,13 +172,11 @@ def append_game_to_csv(result, results_dir: str, filename_base: str) -> None:
             "winner_side",
         ]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        
+
         for player in result.players:
             won_game = (
                 player["is_mister_white"] and result.winner_side == "mister_white"
-            ) or (
-                not player["is_mister_white"] and result.winner_side == "citizens"
-            )
+            ) or (not player["is_mister_white"] and result.winner_side == "citizens")
             writer.writerow(
                 {
                     "game_id": result.game_id,
@@ -213,10 +209,10 @@ def append_game_to_csv(result, results_dir: str, filename_base: str) -> None:
             "is_mister_white",
         ]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        
+
         # Create a lookup for player info
         player_lookup = {p["name"]: p for p in result.players}
-        
+
         for message in result.messages:
             player_info = player_lookup.get(message["player"], {})
             writer.writerow(
@@ -241,12 +237,12 @@ def finalize_tournament_csv(
     filename_base: str,
 ) -> str:
     """Write final tournament summary and model statistics CSV files."""
-    
+
     summary = tournament_data["summary"]
     completed_games = summary.get("completed_games", summary.get("total_games", 0))
     planned_games = summary.get("planned_games", completed_games)
     failed_game = summary.get("failed_game")
-    
+
     # Count models used in this tournament
     openai_models = set()
     mistral_models = set()
@@ -259,7 +255,7 @@ def finalize_tournament_csv(
             mistral_models.add(model)
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    
+
     # Update filename if partial
     final_filename_base = filename_base
     if failed_game is not None and "_partial" not in filename_base:

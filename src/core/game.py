@@ -5,12 +5,12 @@ Contains the game engine and single game execution logic.
 
 import random
 from datetime import datetime
-from typing import List, Optional, Dict, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from src.config import constants
-from src.prompts import prompts
 from src.core.agent import Player
 from src.core.models import GameResult
+from src.prompts import prompts
 
 
 class MisterWhiteGame:
