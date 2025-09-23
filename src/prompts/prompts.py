@@ -49,7 +49,7 @@ VOTING_SYSTEM = (
 
 CITIZEN_VOTING_USER = (
     "All messages (order randomized):\n{context}\n\n"
-    "ROLE: CITIZEN. You win if Mister White is eliminated. "
+    "ROLE: CITIZEN. You win if Mister White is eliminated, and you know you are not Mister White."
     "Hint: Mister White saw others’ clues before giving theirs; similarity alone ≠ guilt. "
     "Focus on the clue least connected to '{word}' or overly generic/safe.\n\n"
     "OUTPUT: ONLY the name."
@@ -57,7 +57,7 @@ CITIZEN_VOTING_USER = (
 
 MISTER_WHITE_VOTING_USER = (
     "All messages (order randomized):\n{context}\n\n"
-    "ROLE: MISTER WHITE. You win if you SURVIVE. "
+    "ROLE: MISTER WHITE (Emily). You win if you SURVIVE. "
     "Vote to push attention elsewhere; avoid reciprocal suspicion.\n\n"
     "OUTPUT: ONLY the name."
 )
