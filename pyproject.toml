@@ -9,4 +9,5 @@ dependencies = [
   "python-dotenv>=1.0.1",
   "mistralai>=1.2.4",
   "pydantic>=2.8.2",
+  "nikitas-agents @ git+https://github.com/NikitaDmitrieff/nikitas-agents.git",
 ]
