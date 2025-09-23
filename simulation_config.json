@@ -1,6 +1,6 @@
 {
   "tournament_config": {
-    "num_games": 200,
+    "num_games": 2,
     "verbose": false,
     "show_progress": true
   },

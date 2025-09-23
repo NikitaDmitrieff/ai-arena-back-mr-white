@@ -157,6 +157,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "mistralai" },
+    { name = "nikitas-agents" },
     { name = "openai" },
     { name = "pydantic" },
     { name = "python-dotenv" },
@@ -165,6 +166,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "mistralai", specifier = ">=1.2.4" },
+    { name = "nikitas-agents", git = "https://github.com/NikitaDmitrieff/nikitas-agents.git" },
     { name = "openai", specifier = ">=1.35.0" },
     { name = "pydantic", specifier = ">=2.8.2" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
@@ -186,6 +188,16 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/6d/a3/1ae43c9db1fc612176d5d3418c12cd363852e954c5d12bf3a4477de2e4a6/mistralai-1.9.10.tar.gz", hash = "sha256:a95721276f035bf86c7fdc1373d7fb7d056d83510226f349426e0d522c0c0965", size = 205043, upload-time = "2025-09-02T07:44:38.859Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/29/40/646448b5ad66efec097471bd5ab25f5b08360e3f34aecbe5c4fcc6845c01/mistralai-1.9.10-py3-none-any.whl", hash = "sha256:cf0a2906e254bb4825209a26e1957e6e0bacbbe61875bd22128dc3d5d51a7b0a", size = 440538, upload-time = "2025-09-02T07:44:37.5Z" },
+]
+
+[[package]]
+name = "nikitas-agents"
+version = "0.1.0"
+source = { git = "https://github.com/NikitaDmitrieff/nikitas-agents.git#91533a9c3eaffba6d7b8519812ddbaea6a33b282" }
+dependencies = [
+    { name = "mistralai" },
+    { name = "openai" },
+    { name = "python-dotenv" },
 ]
 
 [[package]]
