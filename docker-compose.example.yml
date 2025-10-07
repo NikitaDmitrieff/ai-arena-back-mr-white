@@ -1,0 +1,33 @@
+# Example docker-compose.yml snippet for Mr White backend
+# Add this to your /opt/ai-arena/docker-compose.yml
+
+services:
+  backend-mrwhite:
+    image: ghcr.io/nikitadmitrieff/ai-arena-back-mr-white:latest
+    container_name: ai-arena-backend-mrwhite
+    ports:
+      - "8001:8001"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY}
+    volumes:
+      - ./logs/mrwhite:/app/logs
+    networks:
+      - ai-arena-network
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  ai-arena-network:
+    driver: bridge
+

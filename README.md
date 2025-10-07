@@ -2,7 +2,33 @@
 
 AI tournament system for the social deduction game "Mister White" using multiple LLM providers. Features a modular architecture for easy extension and comprehensive data analysis.
 
-## Quick Start
+## 🚀 Two Ways to Use
+
+### 1. REST API (New! 🎮)
+
+Run games via FastAPI with real-time WebSocket updates:
+
+```bash
+# Start API server
+./run_api.sh
+# or
+uvicorn api.main:app --reload --port 8001
+
+# API available at http://localhost:8001
+# Documentation at http://localhost:8001/docs
+```
+
+**Features:**
+- ✅ RESTful API for game management
+- 🔌 WebSocket support for real-time updates
+- 🎮 Concurrent game support
+- 📡 Perfect for integrating with other services
+
+See [API_README.md](API_README.md) for detailed API documentation.
+
+### 2. Command Line (Original)
+
+Run tournaments directly from the command line:
 
 1. **Set up API keys** in `.env`:
    ```
@@ -80,6 +106,7 @@ Results saved in organized CSV files:
 
 The codebase uses a clean modular architecture:
 
+### Core Game Engine
 - `main.py` - Entry point and high-level orchestration
 - `config.py` - Configuration loading and management  
 - `game.py` - Core game mechanics and single game execution
@@ -91,10 +118,46 @@ The codebase uses a clean modular architecture:
 - `prompts.py` - All game prompts and instructions
 - `constants.py` - Static configuration and defaults
 
-See `CODEBASE.md` for detailed module documentation.
+### FastAPI (New!)
+- `api/main.py` - FastAPI application entry point
+- `api/routes.py` - REST API endpoints
+- `api/models.py` - Pydantic models for API validation
+- `api/game_manager.py` - Concurrent game execution manager
+- `api/websocket_manager.py` - Real-time event broadcasting
+- `examples/` - Example client implementations
+
+See `CODEBASE.md` for core architecture and `API_ARCHITECTURE.md` for API details.
 
 ## Requirements
 
-- Python 3.8+
+- Python 3.13+
 - OpenAI and/or Mistral API access
-- Dependencies: `openai`, `mistralai`, `python-dotenv`
+- Dependencies installed via `uv sync` or `pip install -e .`
+
+## Documentation
+
+- [README.md](README.md) - This file (overview and quick start)
+- [CODEBASE.md](CODEBASE.md) - Core game engine architecture
+- [API_README.md](API_README.md) - FastAPI usage and examples
+- [API_ARCHITECTURE.md](API_ARCHITECTURE.md) - Detailed API architecture
+- [FRONTEND_INTEGRATION.md](FRONTEND_INTEGRATION.md) - Frontend integration guide
+- [DEPLOYMENT.md](DEPLOYMENT.md) - Docker deployment guide
+
+## 🐳 Docker Deployment
+
+Build and run with Docker:
+
+```bash
+# Build image
+docker build -t mrwhite-backend .
+
+# Run container
+docker run -d \
+  -p 8001:8001 \
+  -e OPENAI_API_KEY=your_key \
+  -e MISTRAL_API_KEY=your_key \
+  --name mrwhite-backend \
+  mrwhite-backend
+```
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for production deployment with GitHub Actions.

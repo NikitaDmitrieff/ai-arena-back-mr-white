@@ -10,4 +10,9 @@ dependencies = [
   "mistralai>=1.2.4",
   "pydantic>=2.8.2",
   "nikitas-agents @ git+https://github.com/NikitaDmitrieff/nikitas-agents.git",
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.32.0",
+  "websockets>=13.0",
+  "httpx>=0.27.0",
+  "requests>=2.32.0",
 ]
